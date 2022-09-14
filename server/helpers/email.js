@@ -1,5 +1,5 @@
-exports.registerEmailParams = (email, token) => {
-  const params = {
+exports.registerEmailParams = (name, email, token) => {
+  return {
     Source: process.env.EMAIL_FROM,
     Destination: {
       ToAddresses: [email],

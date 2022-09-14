@@ -36,7 +36,7 @@ exports.register = (req, res) => {
     );
 
     // send email
-    const params = registerEmailParams(email, token);
+    const params = registerEmailParams(name, email, token);
     // const params = {
     //   Source: process.env.EMAIL_FROM,
     //   Destination: {
@@ -71,13 +71,17 @@ exports.register = (req, res) => {
     const sendEmailOnRegister = ses.sendEmail(params).promise();
 
     sendEmailOnRegister
-      .then((res) => {
-        console.log("email submitted to ses");
-        reset.email("Email Sent");
+      .then((data) => {
+        console.log("email submitted to ses", data);
+        res.json({
+          message: `Email has been sent to ${email}, follow the instructions to complete your registration`,
+        });
       })
       .catch((err) => {
         console.log("ses email on register", err);
-        res.send("email failed");
+        res.json({
+          error: `We could not verify your email. Please try again`,
+        });
       });
   });
 

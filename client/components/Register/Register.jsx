@@ -2,8 +2,10 @@ import { Container, Grid, Button, Typography } from "@mui/material";
 import React, { useState } from "react";
 import styles from "./Register.module.scss";
 import axios from "axios";
+import { API } from "../../config";
 
 const Register = () => {
+  console.log(API);
   const [value, setValue] = useState({
     name: "",
     email: "",
@@ -13,15 +15,18 @@ const Register = () => {
     setValue({ ...value, [name]: event.target.value });
   };
 
-  const handleSubmit = () => {
-    axios
-      .post("http://localhost:8000/api/register", {
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(`${API}/register`, {
         name: value.name,
         email: value.email,
         password: value.password,
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      });
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className={styles._wrapper}>
