@@ -1,8 +1,8 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const AWS = require("aws-sdk");
-const { reset } = require("nodemon");
 const { registerEmailParams } = require("../helpers/email");
+const shortId = require("shortid");
 
 AWS.config.update({
   accessKey: process.env.AWS_ACCESS_KEY_ID,
@@ -86,4 +86,45 @@ exports.register = (req, res) => {
   });
 
   // res.status(200);
+};
+
+exports.registerActivate = (req, res) => {
+  const { token } = req.body;
+  // console.log(token);
+
+  jwt.verify(
+    token,
+    process.env.JWT_ACCOUNT_ACTIVATION,
+    function (err, decoded) {
+      if (err) {
+        return res.status(401).json({
+          error: "Expired link, Try again",
+        });
+      }
+      const { name, email, password } = jwt.decode(token);
+      const userName = shortId.generate();
+
+      User.findOne({ email }).exec((err, user) => {
+        if (user) {
+          return res.status(401).json({
+            error: "Error is token",
+          });
+        }
+
+        // register new user
+        const newUser = new User({ userName, name, email, password });
+        newUser.save((err, result) => {
+          if (err) {
+            return res.status(401).json({
+              error: "Error saving user in database. try later",
+            });
+          }
+
+          return res.status({
+            message: "Registeration success. Please Login",
+          });
+        });
+      });
+    }
+  );
 };
