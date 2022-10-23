@@ -1,16 +1,13 @@
 import React from "react";
 import Layout from "../components/Layout";
+import Login from "../components/login/Login";
 
-const Login = () => {
+const LoginPage = () => {
   return (
     <Layout>
-      <h1>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam
-        voluptatibus, dolorum at ducimus recusandae nisi ipsa reiciendis
-        aliquid. Temporibus, iste!
-      </h1>
+      <Login />
     </Layout>
   );
 };
 
-export default Login;
+export default LoginPage;

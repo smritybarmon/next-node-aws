@@ -120,11 +120,38 @@ exports.registerActivate = (req, res) => {
             });
           }
 
-          return res.status({
-            message: "Registeration success. Please Login",
+          return res.json({
+            message: "Registration success. Please Login",
           });
         });
       });
     }
   );
+};
+
+// login controllers
+exports.login = (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({ email }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User with that email does not exist. Please register",
+      });
+    }
+
+    // authenticate user
+    if (!user.authenticate(password)) {
+      return res.status(400).json({
+        error: "Email and password do not match",
+      });
+    }
+
+    // generate token and send to client
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    const { _id, name, email, role } = user;
+    return res.json({ token, user: { _id, name, email, role } });
+  });
 };

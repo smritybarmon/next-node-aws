@@ -1,4 +1,4 @@
-import { Container, Grid, Button, Typography } from "@mui/material";
+import { Container, Grid, Button, Typography, Card } from "@mui/material";
 import React, { useState } from "react";
 import styles from "./Register.module.scss";
 import axios from "axios";
@@ -50,7 +50,7 @@ const Register = () => {
       <Container>
         <Grid container spacing={1} justifyContent="center">
           <Grid md={6} sm={10} xs={12}>
-            <div>
+            <Card className={styles._card}>
               <Typography variant="h6" color="initial" component="h6">
                 Register
               </Typography>
@@ -80,7 +80,7 @@ const Register = () => {
               >
                 Register
               </Button>
-            </div>
+            </Card>
           </Grid>
         </Grid>
       </Container>
